@@ -1,5 +1,5 @@
 class TopicsController < ApplicationController
-  before_action :set_topic, only: [:show, :edit, :update, :destroy]
+  before_action :set_topic, only: [:show, :edit, :update, :destroy, :upvote, :downvote]
 
   # GET /topics
   # GET /topics.json
@@ -59,6 +59,18 @@ class TopicsController < ApplicationController
       format.html { redirect_to topics_url, notice: 'Topic was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def upvote
+    @topic.votes.create
+    redirect_to topics_path
+  end
+
+  def downvote
+    if @topic.votes.count > 0
+      @topic.votes.first.destroy
+    end
+    redirect_to topics_path
   end
 
   private
